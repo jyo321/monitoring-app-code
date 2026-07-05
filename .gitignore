@@ -1,0 +1,18 @@
+# Node
+node_modules/
+frontend/dist/
+frontend/.env
+
+# .NET
+backend/**/bin/
+backend/**/obj/
+backend/**/*.user
+backend/**/*.suo
+backend/.env
+
+# Docker
+.env
+
+# OS
+.DS_Store
+Thumbs.db

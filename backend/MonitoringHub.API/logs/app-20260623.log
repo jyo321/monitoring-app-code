@@ -1,0 +1,1259 @@
+2026-06-23 04:01:28.214 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 04:01:28.214 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 04:01:28.298 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 04:01:28.298 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 04:01:28.301 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 04:01:28.301 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 04:01:28.355 +00:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 04:01:28.355 +00:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 04:01:28.376 +00:00 [INF] Executed DbCommand (14ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 04:01:28.377 +00:00 [INF] Executed DbCommand (15ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 04:01:28.382 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 04:01:28.382 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.387 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.389 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 04:01:28.394 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 04:01:28.394 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.396 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 92.8751ms
+2026-06-23 04:01:28.397 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 04:01:28.398 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 100.8217 ms
+2026-06-23 04:01:28.399 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 185.4729ms
+2026-06-23 04:01:28.399 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.403 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.408 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.413 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.416 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.417 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 04:01:28.418 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 115.5954ms
+2026-06-23 04:01:28.419 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 04:01:28.420 +00:00 [INF] HTTP GET /api/servers responded 200 in 122.9771 ms
+2026-06-23 04:01:28.420 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 206.7157ms
+2026-06-23 04:01:28.551 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 04:01:28.551 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 04:01:28.552 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 04:01:28.553 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 04:01:28.554 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 04:01:28.555 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 04:01:28.560 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 04:01:28.561 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 04:01:28.563 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 04:01:28.563 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 04:01:28.565 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 04:01:28.566 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.567 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.568 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 04:01:28.568 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 04:01:28.569 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 11.743ms
+2026-06-23 04:01:28.569 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.570 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 04:01:28.572 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 19.1822 ms
+2026-06-23 04:01:28.573 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 22.2538ms
+2026-06-23 04:01:28.575 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.578 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.580 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.581 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.583 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 04:01:28.584 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 04:01:28.584 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 27.9806ms
+2026-06-23 04:01:28.585 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 04:01:28.585 +00:00 [INF] HTTP GET /api/servers responded 200 in 33.3129 ms
+2026-06-23 04:01:28.586 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 35.0123ms
+2026-06-23 04:01:35.689 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/5 - null null
+2026-06-23 04:01:35.692 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 04:01:35.694 +00:00 [INF] Route matched with {action = "GetServer", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.ServerDetailDto]] GetServer(Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 04:01:35.703 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-06-23 04:01:35.709 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT DISTINCT d."MountPoint"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0
+2026-06-23 04:01:35.713 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 04:01:35.717 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ResolvedAt", a."ServerId", a."Severity", a."UsagePercent"
+FROM "Alerts" AS a
+WHERE a."ServerId" = @__id_0
+ORDER BY a."CreatedAt" DESC
+LIMIT @__p_1
+2026-06-23 04:01:35.718 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.ServerDetailDto'.
+2026-06-23 04:01:35.720 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API) in 24.6341ms
+2026-06-23 04:01:35.721 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 04:01:35.722 +00:00 [INF] HTTP GET /api/servers/5 responded 200 in 30.0711 ms
+2026-06-23 04:01:35.723 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/5 - 200 null application/json; charset=utf-8 33.4085ms
+2026-06-23 07:14:12.076 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 07:14:12.076 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 07:14:12.091 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 07:14:12.091 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 07:14:12.095 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 07:14:12.095 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 07:14:12.182 +00:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 07:14:12.182 +00:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 07:14:12.200 +00:00 [INF] Executed DbCommand (10ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 07:14:12.200 +00:00 [INF] Executed DbCommand (10ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 07:14:12.206 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 07:14:12.207 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.211 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.213 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 07:14:12.214 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.215 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 07:14:12.218 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.218 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 122.1745ms
+2026-06-23 07:14:12.220 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 07:14:12.221 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.221 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 137.7298 ms
+2026-06-23 07:14:12.224 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 149.1558ms
+2026-06-23 07:14:12.225 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.231 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.234 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:14:12.236 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 07:14:12.238 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 142.4373ms
+2026-06-23 07:14:12.239 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 07:14:12.240 +00:00 [INF] HTTP GET /api/servers responded 200 in 156.5428 ms
+2026-06-23 07:14:12.241 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 166.6809ms
+2026-06-23 07:24:07.627 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 07:24:07.627 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 07:24:07.635 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 07:24:07.635 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 07:24:07.637 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 07:24:07.637 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 07:24:07.672 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 07:24:07.672 +00:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 07:24:07.682 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 07:24:07.682 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 07:24:07.686 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.687 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 07:24:07.689 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.692 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 07:24:07.692 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.693 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 07:24:07.696 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 56.2912ms
+2026-06-23 07:24:07.696 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.696 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 07:24:07.699 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 66.6916 ms
+2026-06-23 07:24:07.700 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 73.3126ms
+2026-06-23 07:24:07.701 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.706 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.709 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.712 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 07:24:07.713 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 07:24:07.714 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 75.8231ms
+2026-06-23 07:24:07.715 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 07:24:07.715 +00:00 [INF] HTTP GET /api/servers responded 200 in 83.3825 ms
+2026-06-23 07:24:07.716 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 89.6038ms
+2026-06-23 08:26:14.431 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 08:26:14.443 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 08:26:14.444 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:26:14.444 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:26:14.447 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 08:26:14.447 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:26:14.502 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 08:26:14.502 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 08:26:14.513 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:26:14.513 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:26:14.517 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.519 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 08:26:14.520 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.523 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.524 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 08:26:14.526 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.527 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 08:26:14.529 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.530 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 82.0099ms
+2026-06-23 08:26:14.531 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:26:14.532 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 92.9718 ms
+2026-06-23 08:26:14.532 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.534 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 104.5012ms
+2026-06-23 08:26:14.536 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.539 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:26:14.540 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 08:26:14.542 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 93.6716ms
+2026-06-23 08:26:14.543 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:26:14.543 +00:00 [INF] HTTP GET /api/servers responded 200 in 99.8940 ms
+2026-06-23 08:26:14.544 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 101.5126ms
+2026-06-23 08:59:19.578 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 08:59:19.580 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 08:59:19.582 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:59:19.583 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:19.584 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 08:59:19.584 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:19.617 +00:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 08:59:19.617 +00:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 08:59:19.625 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:59:19.625 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:59:19.629 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.629 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 08:59:19.633 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.636 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 08:59:19.638 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.639 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 08:59:19.642 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 57.0146ms
+2026-06-23 08:59:19.642 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.643 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:59:19.646 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 64.3434 ms
+2026-06-23 08:59:19.649 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 69.3675ms
+2026-06-23 08:59:19.650 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.656 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.665 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.672 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.673 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 08:59:19.674 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 88.9655ms
+2026-06-23 08:59:19.675 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:19.676 +00:00 [INF] HTTP GET /api/servers responded 200 in 96.5538 ms
+2026-06-23 08:59:19.677 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 99.2361ms
+2026-06-23 08:59:19.835 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 08:59:19.837 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:59:19.838 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 08:59:19.839 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 08:59:19.842 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:19.844 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:19.846 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 08:59:19.852 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 08:59:19.853 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:59:19.855 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 08:59:19.856 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:59:19.858 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.858 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 08:59:19.860 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 08:59:19.861 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 20.7638ms
+2026-06-23 08:59:19.861 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:59:19.862 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.862 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 25.1813 ms
+2026-06-23 08:59:19.863 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 27.6968ms
+2026-06-23 08:59:19.867 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.878 +00:00 [INF] Executed DbCommand (8ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.881 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.886 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.888 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.890 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:19.892 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 08:59:19.893 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 47.9553ms
+2026-06-23 08:59:19.894 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:19.894 +00:00 [INF] HTTP GET /api/servers responded 200 in 54.7689 ms
+2026-06-23 08:59:19.895 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 57.0028ms
+2026-06-23 08:59:49.892 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 08:59:49.895 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:59:49.896 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 08:59:49.902 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 08:59:49.908 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:59:49.914 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 08:59:49.921 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 08:59:49.925 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:49.925 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 08:59:49.927 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:49.928 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 08:59:49.932 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 33.4369ms
+2026-06-23 08:59:49.933 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 08:59:49.935 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 08:59:49.938 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 44.8507 ms
+2026-06-23 08:59:49.940 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 48.5497ms
+2026-06-23 08:59:49.944 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:59:49.955 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.960 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.967 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.971 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.972 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/5 - null null
+2026-06-23 08:59:49.975 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.976 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:49.977 +00:00 [INF] Route matched with {action = "GetServer", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.ServerDetailDto]] GetServer(Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:49.978 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.981 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.985 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:49.986 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 08:59:49.987 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 57.9583ms
+2026-06-23 08:59:49.987 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:49.987 +00:00 [INF] HTTP GET /api/servers responded 200 in 64.0119 ms
+2026-06-23 08:59:49.988 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 67.1342ms
+2026-06-23 08:59:50.009 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-06-23 08:59:50.020 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT DISTINCT d."MountPoint"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0
+2026-06-23 08:59:50.027 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 08:59:50.040 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ResolvedAt", a."ServerId", a."Severity", a."UsagePercent"
+FROM "Alerts" AS a
+WHERE a."ServerId" = @__id_0
+ORDER BY a."CreatedAt" DESC
+LIMIT @__p_1
+2026-06-23 08:59:50.042 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.ServerDetailDto'.
+2026-06-23 08:59:50.044 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API) in 65.7171ms
+2026-06-23 08:59:50.045 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:50.046 +00:00 [INF] HTTP GET /api/servers/5 responded 200 in 70.2620 ms
+2026-06-23 08:59:50.047 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/5 - 200 null application/json; charset=utf-8 75.2438ms
+2026-06-23 08:59:51.769 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/2 - null null
+2026-06-23 08:59:51.772 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:51.775 +00:00 [INF] Route matched with {action = "GetServer", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.ServerDetailDto]] GetServer(Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:51.783 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-06-23 08:59:51.789 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT DISTINCT d."MountPoint"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0
+2026-06-23 08:59:51.792 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 08:59:51.796 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ResolvedAt", a."ServerId", a."Severity", a."UsagePercent"
+FROM "Alerts" AS a
+WHERE a."ServerId" = @__id_0
+ORDER BY a."CreatedAt" DESC
+LIMIT @__p_1
+2026-06-23 08:59:51.810 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.ServerDetailDto'.
+2026-06-23 08:59:51.812 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API) in 36.491ms
+2026-06-23 08:59:51.813 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:51.816 +00:00 [INF] HTTP GET /api/servers/2 responded 200 in 44.1764 ms
+2026-06-23 08:59:51.818 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/2 - 200 null application/json; charset=utf-8 49.2997ms
+2026-06-23 08:59:54.251 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/4 - null null
+2026-06-23 08:59:54.254 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:54.255 +00:00 [INF] Route matched with {action = "GetServer", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.ServerDetailDto]] GetServer(Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:54.268 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-06-23 08:59:54.272 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT DISTINCT d."MountPoint"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0
+2026-06-23 08:59:54.275 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 08:59:54.278 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ResolvedAt", a."ServerId", a."Severity", a."UsagePercent"
+FROM "Alerts" AS a
+WHERE a."ServerId" = @__id_0
+ORDER BY a."CreatedAt" DESC
+LIMIT @__p_1
+2026-06-23 08:59:54.279 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.ServerDetailDto'.
+2026-06-23 08:59:54.281 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API) in 25.1403ms
+2026-06-23 08:59:54.283 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:54.284 +00:00 [INF] HTTP GET /api/servers/4 responded 200 in 31.9124 ms
+2026-06-23 08:59:54.286 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/4 - 200 null application/json; charset=utf-8 35.0055ms
+2026-06-23 08:59:55.309 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/1 - null null
+2026-06-23 08:59:55.316 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:55.317 +00:00 [INF] Route matched with {action = "GetServer", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.ServerDetailDto]] GetServer(Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:55.329 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-06-23 08:59:55.337 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT DISTINCT d."MountPoint"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0
+2026-06-23 08:59:55.341 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 08:59:55.350 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 08:59:55.354 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ResolvedAt", a."ServerId", a."Severity", a."UsagePercent"
+FROM "Alerts" AS a
+WHERE a."ServerId" = @__id_0
+ORDER BY a."CreatedAt" DESC
+LIMIT @__p_1
+2026-06-23 08:59:55.356 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.ServerDetailDto'.
+2026-06-23 08:59:55.357 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API) in 36.1568ms
+2026-06-23 08:59:55.358 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 08:59:55.359 +00:00 [INF] HTTP GET /api/servers/1 responded 200 in 46.5720 ms
+2026-06-23 08:59:55.361 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/1 - 200 null application/json; charset=utf-8 51.671ms
+2026-06-23 08:59:59.198 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?page=1&pageSize=15 - null null
+2026-06-23 08:59:59.204 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:59.205 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 08:59:59.216 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 08:59:59.221 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 08:59:59.223 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.227 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.234 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.240 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.245 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.249 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.253 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.255 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 08:59:59.256 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 08:59:59.257 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 51.3787ms
+2026-06-23 08:59:59.258 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 08:59:59.260 +00:00 [INF] HTTP GET /api/servers responded 200 in 59.9182 ms
+2026-06-23 08:59:59.261 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?page=1&pageSize=15 - 200 null application/json; charset=utf-8 63.3465ms
+2026-06-23 09:00:01.107 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/5 - null null
+2026-06-23 09:00:01.110 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 09:00:01.111 +00:00 [INF] Route matched with {action = "GetServer", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.ServerDetailDto]] GetServer(Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 09:00:01.117 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-06-23 09:00:01.119 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT DISTINCT d."MountPoint"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0
+2026-06-23 09:00:01.121 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 09:00:01.124 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ResolvedAt", a."ServerId", a."Severity", a."UsagePercent"
+FROM "Alerts" AS a
+WHERE a."ServerId" = @__id_0
+ORDER BY a."CreatedAt" DESC
+LIMIT @__p_1
+2026-06-23 09:00:01.124 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.ServerDetailDto'.
+2026-06-23 09:00:01.125 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API) in 13.5489ms
+2026-06-23 09:00:01.126 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 09:00:01.128 +00:00 [INF] HTTP GET /api/servers/5 responded 200 in 19.2233 ms
+2026-06-23 09:00:01.129 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/5 - 200 null application/json; charset=utf-8 22.1678ms
+2026-06-23 09:00:01.416 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/5/history?mountPoint=%2F&range=24h - null null
+2026-06-23 09:00:01.421 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetHistory (MonitoringHub.API)'
+2026-06-23 09:00:01.423 +00:00 [INF] Route matched with {action = "GetHistory", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[MonitoringHub.API.DTOs.DiskMetricDto]]] GetHistory(Int32, System.String, System.String) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 09:00:01.445 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__mountPoint_1='?', @__cutoff_2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."MountPoint", d."FileSystem", d."FileSystemType", d."TotalSize", d."UsedSize", d."AvailableSize", d."UsagePercent", d."CollectedAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0 AND d."MountPoint" = @__mountPoint_1 AND d."CollectedAt" >= @__cutoff_2
+ORDER BY d."CollectedAt"
+2026-06-23 09:00:01.448 +00:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MonitoringHub.API.DTOs.DiskMetricDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 09:00:01.450 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetHistory (MonitoringHub.API) in 25.5337ms
+2026-06-23 09:00:01.451 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetHistory (MonitoringHub.API)'
+2026-06-23 09:00:01.452 +00:00 [INF] HTTP GET /api/servers/5/history responded 200 in 33.3804 ms
+2026-06-23 09:00:01.454 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/5/history?mountPoint=%2F&range=24h - 200 null application/json; charset=utf-8 37.7476ms
+2026-06-23 09:00:10.571 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/alerts?resolved=false&page=1&pageSize=20 - null null
+2026-06-23 09:00:10.577 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.AlertsController.GetAlerts (MonitoringHub.API)'
+2026-06-23 09:00:10.579 +00:00 [INF] Route matched with {action = "GetAlerts", controller = "Alerts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.AlertDto]]] GetAlerts(System.Nullable`1[System.Boolean], System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.AlertsController (MonitoringHub.API).
+2026-06-23 09:00:10.601 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__resolved_Value_0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE a."IsResolved" = @__resolved_Value_0
+2026-06-23 09:00:10.606 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__resolved_Value_0='?' (DbType = Boolean), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE a."IsResolved" = @__resolved_Value_0
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 09:00:10.608 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.AlertDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 09:00:10.613 +00:00 [INF] Executed action MonitoringHub.API.Controllers.AlertsController.GetAlerts (MonitoringHub.API) in 31.029ms
+2026-06-23 09:00:10.616 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.AlertsController.GetAlerts (MonitoringHub.API)'
+2026-06-23 09:00:10.617 +00:00 [INF] HTTP GET /api/alerts responded 200 in 41.8056 ms
+2026-06-23 09:00:10.620 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/alerts?resolved=false&page=1&pageSize=20 - 200 null application/json; charset=utf-8 48.9695ms
+2026-06-23 09:00:40.639 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/alerts?resolved=false&page=1&pageSize=20 - null null
+2026-06-23 09:00:40.641 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.AlertsController.GetAlerts (MonitoringHub.API)'
+2026-06-23 09:00:40.643 +00:00 [INF] Route matched with {action = "GetAlerts", controller = "Alerts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.AlertDto]]] GetAlerts(System.Nullable`1[System.Boolean], System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.AlertsController (MonitoringHub.API).
+2026-06-23 09:00:40.658 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__resolved_Value_0='?' (DbType = Boolean)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE a."IsResolved" = @__resolved_Value_0
+2026-06-23 09:00:40.666 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__resolved_Value_0='?' (DbType = Boolean), @__p_2='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE a."IsResolved" = @__resolved_Value_0
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_2 OFFSET @__p_1
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 09:00:40.671 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.AlertDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 09:00:40.673 +00:00 [INF] Executed action MonitoringHub.API.Controllers.AlertsController.GetAlerts (MonitoringHub.API) in 28.4349ms
+2026-06-23 09:00:40.674 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.AlertsController.GetAlerts (MonitoringHub.API)'
+2026-06-23 09:00:40.675 +00:00 [INF] HTTP GET /api/alerts responded 200 in 34.7668 ms
+2026-06-23 09:00:40.678 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/alerts?resolved=false&page=1&pageSize=20 - 200 null application/json; charset=utf-8 39.5476ms
+2026-06-23 09:00:49.718 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?page=1&pageSize=15 - null null
+2026-06-23 09:00:49.724 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 09:00:49.726 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 09:00:49.736 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 09:00:49.745 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 09:00:49.751 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.756 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.759 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.762 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.767 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.771 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.775 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.779 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:00:49.783 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 09:00:49.784 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 56.8084ms
+2026-06-23 09:00:49.786 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 09:00:49.787 +00:00 [INF] HTTP GET /api/servers responded 200 in 66.0497 ms
+2026-06-23 09:00:49.789 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?page=1&pageSize=15 - 200 null application/json; charset=utf-8 70.2908ms
+2026-06-23 09:01:00.063 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/2 - null null
+2026-06-23 09:01:00.068 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 09:01:00.069 +00:00 [INF] Route matched with {action = "GetServer", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.ServerDetailDto]] GetServer(Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 09:01:00.073 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-06-23 09:01:00.078 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT DISTINCT d."MountPoint"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0
+2026-06-23 09:01:00.085 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__8__locals1_id_0='?' (DbType = Int32), @__mp_1='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."AvailableSize", d."CollectedAt", d."FileSystem", d."FileSystemType", d."MountPoint", d."ServerId", d."TotalSize", d."UsagePercent", d."UsedSize"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_id_0 AND d."MountPoint" = @__mp_1
+ORDER BY d."CollectedAt" DESC
+LIMIT 1
+2026-06-23 09:01:00.088 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ResolvedAt", a."ServerId", a."Severity", a."UsagePercent"
+FROM "Alerts" AS a
+WHERE a."ServerId" = @__id_0
+ORDER BY a."CreatedAt" DESC
+LIMIT @__p_1
+2026-06-23 09:01:00.089 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.ServerDetailDto'.
+2026-06-23 09:01:00.091 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API) in 20.731ms
+2026-06-23 09:01:00.092 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServer (MonitoringHub.API)'
+2026-06-23 09:01:00.092 +00:00 [INF] HTTP GET /api/servers/2 responded 200 in 26.9366 ms
+2026-06-23 09:01:00.093 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/2 - 200 null application/json; charset=utf-8 30.2492ms
+2026-06-23 09:01:00.397 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers/2/history?mountPoint=%2F&range=24h - null null
+2026-06-23 09:01:00.403 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetHistory (MonitoringHub.API)'
+2026-06-23 09:01:00.404 +00:00 [INF] Route matched with {action = "GetHistory", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.List`1[MonitoringHub.API.DTOs.DiskMetricDto]]] GetHistory(Int32, System.String, System.String) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 09:01:00.415 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__id_0='?' (DbType = Int32), @__mountPoint_1='?', @__cutoff_2='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."Id", d."MountPoint", d."FileSystem", d."FileSystemType", d."TotalSize", d."UsedSize", d."AvailableSize", d."UsagePercent", d."CollectedAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__id_0 AND d."MountPoint" = @__mountPoint_1 AND d."CollectedAt" >= @__cutoff_2
+ORDER BY d."CollectedAt"
+2026-06-23 09:01:00.417 +00:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[MonitoringHub.API.DTOs.DiskMetricDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 09:01:00.420 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetHistory (MonitoringHub.API) in 14.6322ms
+2026-06-23 09:01:00.421 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetHistory (MonitoringHub.API)'
+2026-06-23 09:01:00.423 +00:00 [INF] HTTP GET /api/servers/2/history responded 200 in 23.2712 ms
+2026-06-23 09:01:00.424 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers/2/history?mountPoint=%2F&range=24h - 200 null application/json; charset=utf-8 28.2999ms
+2026-06-23 09:01:03.236 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 09:01:03.237 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 09:01:03.240 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 09:01:03.242 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 09:01:03.243 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 09:01:03.245 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 09:01:03.251 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 09:01:03.254 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 09:01:03.257 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 09:01:03.260 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 09:01:03.260 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 09:01:03.265 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.268 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 09:01:03.270 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.270 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 09:01:03.272 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 25.9499ms
+2026-06-23 09:01:03.275 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 09:01:03.276 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 37.5729 ms
+2026-06-23 09:01:03.276 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.277 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 40.4571ms
+2026-06-23 09:01:03.285 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.287 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.290 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.292 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.294 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 09:01:03.295 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 09:01:03.297 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 53.0579ms
+2026-06-23 09:01:03.298 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 09:01:03.301 +00:00 [INF] HTTP GET /api/servers responded 200 in 61.2251 ms
+2026-06-23 09:01:03.302 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 65.8724ms
+2026-06-23 11:57:27.790 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 11:57:28.629 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 11:57:28.897 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 11:57:28.897 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 11:57:28.919 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 11:57:28.920 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 11:57:29.050 +00:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 11:57:29.051 +00:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 11:57:29.083 +00:00 [INF] Executed DbCommand (9ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 11:57:29.084 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 11:57:29.095 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 11:57:29.107 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.117 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 11:57:29.125 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.131 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 11:57:29.142 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.148 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 210.1896ms
+2026-06-23 11:57:29.157 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.162 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 11:57:29.171 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.177 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 329.8113 ms
+2026-06-23 11:57:29.193 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.211 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 1450.4979ms
+2026-06-23 11:57:29.237 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.255 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:57:29.262 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 11:57:29.274 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 324.0709ms
+2026-06-23 11:57:29.282 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 11:57:29.290 +00:00 [INF] HTTP GET /api/servers responded 200 in 443.2798 ms
+2026-06-23 11:57:29.295 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 666.5156ms
+2026-06-23 11:59:29.989 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/dashboard - null null
+2026-06-23 11:59:29.990 +00:00 [INF] Request starting HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - null null
+2026-06-23 11:59:29.992 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 11:59:29.993 +00:00 [INF] Route matched with {action = "Get", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.DashboardDto]] Get() on controller MonitoringHub.API.Controllers.DashboardController (MonitoringHub.API).
+2026-06-23 11:59:29.997 +00:00 [INF] Executing endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 11:59:30.003 +00:00 [INF] Route matched with {action = "GetServers", controller = "Servers"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[MonitoringHub.API.DTOs.PagedResult`1[MonitoringHub.API.DTOs.ServerDto]]] GetServers(System.String, System.String, Int32, Int32) on controller MonitoringHub.API.Controllers.ServersController (MonitoringHub.API).
+2026-06-23 11:59:30.014 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+2026-06-23 11:59:30.023 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."CreatedAt", s."Environment", s."Hostname", s."IpAddress", s."LastSeen"
+FROM "Servers" AS s
+ORDER BY s."Hostname"
+2026-06-23 11:59:30.023 +00:00 [INF] Executed DbCommand (6ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."UsagePercent") AS "MaxUsage"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 11:59:30.031 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM "Alerts" AS a
+WHERE NOT (a."IsResolved")
+2026-06-23 11:59:30.032 +00:00 [INF] Executed DbCommand (4ms) [Parameters=[@__serverIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT d."ServerId", max(d."CollectedAt") AS "LatestAt"
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = ANY (@__serverIds_0)
+GROUP BY d."ServerId"
+2026-06-23 11:59:30.039 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.041 +00:00 [INF] Executed DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", t."ServerId", s."Hostname", s."IpAddress", t."Severity", t."AlertType", t."Message", t."MountPoint", t."UsagePercent", t."CreatedAt", t."IsResolved"
+FROM (
+    SELECT a."Id", a."AlertType", a."CreatedAt", a."IsResolved", a."Message", a."MountPoint", a."ServerId", a."Severity", a."UsagePercent"
+    FROM "Alerts" AS a
+    WHERE NOT (a."IsResolved")
+    ORDER BY a."CreatedAt" DESC
+    LIMIT @__p_0
+) AS t
+INNER JOIN "Servers" AS s ON t."ServerId" = s."Id"
+ORDER BY t."CreatedAt" DESC
+2026-06-23 11:59:30.044 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.DashboardDto'.
+2026-06-23 11:59:30.045 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.046 +00:00 [INF] Executed action MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API) in 50.0287ms
+2026-06-23 11:59:30.048 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.DashboardController.Get (MonitoringHub.API)'
+2026-06-23 11:59:30.050 +00:00 [INF] HTTP GET /api/dashboard responded 200 in 59.3376 ms
+2026-06-23 11:59:30.051 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.053 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/dashboard - 200 null application/json; charset=utf-8 64.3649ms
+2026-06-23 11:59:30.058 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.065 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.070 +00:00 [INF] Executed DbCommand (1ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.076 +00:00 [INF] Executed DbCommand (3ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.079 +00:00 [INF] Executed DbCommand (2ms) [Parameters=[@__8__locals1_lps_ServerId_0='?' (DbType = Int32), @__windowStart_1='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT max(d."UsagePercent")
+FROM "DiskMetrics" AS d
+WHERE d."ServerId" = @__8__locals1_lps_ServerId_0 AND d."CollectedAt" >= @__windowStart_1
+2026-06-23 11:59:30.081 +00:00 [INF] Executing OkObjectResult, writing value of type 'MonitoringHub.API.DTOs.PagedResult`1[[MonitoringHub.API.DTOs.ServerDto, MonitoringHub.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-06-23 11:59:30.083 +00:00 [INF] Executed action MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API) in 76.0126ms
+2026-06-23 11:59:30.084 +00:00 [INF] Executed endpoint 'MonitoringHub.API.Controllers.ServersController.GetServers (MonitoringHub.API)'
+2026-06-23 11:59:30.086 +00:00 [INF] HTTP GET /api/servers responded 200 in 94.1224 ms
+2026-06-23 11:59:30.087 +00:00 [INF] Request finished HTTP/1.1 GET http://localhost:4000/api/servers?pageSize=200 - 200 null application/json; charset=utf-8 97.5744ms
