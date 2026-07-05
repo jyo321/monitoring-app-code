@@ -59,7 +59,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ApiTokenMiddleware>();
+// app.UseMiddleware<ApiTokenMiddleware>();
 app.MapControllers();
 
 app.Run();
